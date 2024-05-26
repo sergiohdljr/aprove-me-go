@@ -1,0 +1,35 @@
+version: "3.8"
+services:
+  postgres:
+    image: bitnami/postgresql:latest
+    container_name: "postgres-api-go"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=87575162
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - aprove-me-api-go
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: "pgadmin-api-go"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com 
+      - PGADMIN_DEFAULT_PASSWORD=87575162
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - aprove-me-api-go
+networks:
+  aprove-me-api-go:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
