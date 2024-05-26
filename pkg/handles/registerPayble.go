@@ -6,31 +6,32 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type PaymentRequest struct {
-	ID              string          `json:"id"`
-	Value           float64         `json:"value"`
-	EmissionDate    string          `json:"emissionDate"`
-	Assignor        string          `json:"assignor"`
-	AssignorDetails AssignorDetails `json:"assignorDetails"`
+type PaybleRequest struct {
+	ID              string          `json:"id"  binding:"required,uuid"`
+	Value           float64         `json:"value" binding:"required" `
+	EmissionDate    string          `json:"emissionDate" binding:"required" `
+	Assignor        string          `json:"assignor" binding:"required" `
+	AssignorDetails AssignorDetails `json:"assignorDetails" binding:"required" `
 }
 
 type AssignorDetails struct {
-	ID       string `json:"id"`
-	Document string `json:"document"`
-	Email    string `json:"email"`
-	Phone    string `json:"phone"`
-	Name     string `json:"name"`
+	ID       string `json:"id" binding:"required"`
+	Document string `json:"document" binding:"required,min=11,max=30"`
+	Email    string `json:"email" binding:"required,email,max=140"`
+	Phone    string `json:"phone" binding:"required,max=20"`
+	Name     string `json:"name" binding:"required,max=140"`
 }
 
 func RegisterPayble(ctx *gin.Context) {
-	var body PaymentRequest
+	var body PaybleRequest
 
-	if err := ctx.ShouldBindJSON(&body); err != nil {
+	err := ctx.ShouldBindJSON(&body)
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(200, gin.H{
+	ctx.JSON(http.StatusOK, gin.H{
 		"body": body,
 	})
 }
