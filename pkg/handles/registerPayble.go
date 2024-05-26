@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	handle_errors "github.com/sergiohdljr/aprove-me-go/pkg/handles/errors"
 )
 
 type PaybleRequest struct {
@@ -27,11 +28,9 @@ func RegisterPayble(ctx *gin.Context) {
 
 	err := ctx.ShouldBindJSON(&body)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, handle_errors.ValidationError(err))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"body": body,
-	})
+	ctx.JSON(http.StatusOK, body)
 }
