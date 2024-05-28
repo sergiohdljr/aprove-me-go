@@ -1,10 +1,14 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Payment struct {
-	ID           string    `json:"id"`
-	Value        float64   `json:"value"`
-	EmissionDate time.Time `json:"emissionDate"`
-	AssignorID   string    `json:"assignor_id"`
+	ID           uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primaryKey"`
+	Value        float64   `gorm:"type:float;not null"`
+	EmissionDate time.Time `gorm:"type:time;not null"`
+	AssignorID   uuid.UUID `gorm:"type:uuid;not null"`
 }
