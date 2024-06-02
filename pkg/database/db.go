@@ -22,20 +22,20 @@ var NewLogger = logger.New(
 	},
 )
 
-var db *gorm.DB
+var Db *gorm.DB
 
 func InnitDB() {
 	var err error
 
 	uri := "host=localhost user=postgres password=87575162 dbname=aprove_me port=5432 sslmode=disable"
-	db, err = gorm.Open(postgres.Open(uri), &gorm.Config{
+	Db, err = gorm.Open(postgres.Open(uri), &gorm.Config{
 		Logger: NewLogger,
 	})
 	if err != nil {
 		log.Fatalf("Failed to connect to the database: %v", err)
 	}
 
-	migrationErr := db.AutoMigrate(&models.Assignor{}, &models.Payment{})
+	migrationErr := Db.AutoMigrate(&models.Assignor{}, &models.Payment{})
 
 	if migrationErr != nil {
 		log.Fatalf("migration fails: %v", migrationErr)
