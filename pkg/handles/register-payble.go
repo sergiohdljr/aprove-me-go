@@ -1,6 +1,7 @@
 package handles
 
 import (
+	"errors"
 	"log"
 	"net/http"
 	"time"
@@ -77,7 +78,8 @@ func RegisterPayble(ctx *gin.Context) {
 	newPayment := database.Db.Create(&payble)
 
 	if newPayment.Error != nil {
-		log.Fatalf("failed to create payment: %v %v", err, payble)
+		ctx.Error(errors.New("failed to create payble"))
+		return
 	}
 
 	response := PaybleResponse{
