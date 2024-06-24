@@ -3,6 +3,7 @@ package route
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/sergiohdljr/aprove-me-go/pkg/handles"
+	"github.com/sergiohdljr/aprove-me-go/pkg/middleware"
 )
 
 func RouteInnit() *gin.Engine {
@@ -14,9 +15,12 @@ func RouteInnit() *gin.Engine {
 		})
 	})
 
-	V1 := r.Group("/api/v1")
+	api := r.Group("/api/v1/integrations")
 	{
-		V1.POST("/integrations/payable", handles.RegisterPayble)
+		api.Use(middleware.ErrorMiddleware())
+		api.POST("/payble", handles.RegisterPayble)
+		api.GET("/payble/:id", handles.GetPayble)
+
 	}
 
 	return r
